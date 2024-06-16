@@ -6,6 +6,7 @@ import xssClean from 'xss-clean';
 import mainRoutes from '@api/routes';
 import { checkConnection } from '@db/config';
 import errorHandler from '@middlewares/global/error-handler';
+import { invalidRouteHandler } from '@middlewares/global/invalid-route-handler';
 
 const app: Express = express();
 
@@ -29,6 +30,9 @@ app.use(xssClean());
 
 // Mount routing
 app.use(mainRoutes);
+
+// Invalid route handler
+app.use(invalidRouteHandler);
 
 // Error handler
 app.use(errorHandler);

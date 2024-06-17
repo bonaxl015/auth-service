@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import ResponseCodes from '@enums/responseCodes';
 import { returnFail } from '@utils/returnData';
 import { ErrorHandlerFunction } from '@middlewares/types';
@@ -10,6 +10,7 @@ const errorHandler: ErrorHandlerFunction = (
   error: Error | BaseError,
   _request: Request,
   response: Response,
+  _next: NextFunction,
 ) => {
   if (error.name === ErrorNames.SEQUELIZE_VALIDATION_ERROR) {
     const messageFormatted: string = error.message
@@ -24,7 +25,7 @@ const errorHandler: ErrorHandlerFunction = (
     error.message || ResponseMessage.FAIL,
   );
 
-  response.status(ResponseCodes.NOT_FOUND).json(responseData);
+  response.status(ResponseCodes.BAD_REQUEST).json(responseData);
 };
 
 export default errorHandler;

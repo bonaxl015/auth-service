@@ -1,13 +1,18 @@
+import { ErrorNames } from '@enums/errorNames';
 import ResponseCodes from '@enums/responseCodes';
-import { returnFail } from '@utils/returnData';
-import { Request, Response } from 'express';
+import ErrorResponse from '@utils/errorResponse';
+import { NextFunction, Request, Response } from 'express';
 
-export const invalidRouteHandler = (req: Request, res: Response): void => {
-  const responseData = returnFail<null>(
-    null,
-    ResponseCodes.NOT_FOUND,
+export const invalidRouteHandler = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+): void => {
+  const error = new ErrorResponse(
+    ErrorNames.INVALID_ROUTE,
     `${req.path} not found`,
+    ResponseCodes.NOT_FOUND,
   );
 
-  res.status(ResponseCodes.NOT_FOUND).json(responseData);
+  next(error);
 };

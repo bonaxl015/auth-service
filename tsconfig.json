@@ -13,6 +13,7 @@
       "@models/*": ["models/*"],
       "@middlewares/*": ["middlewares/*"],
       "@utils/*": ["utils/*"],
+      "@src/*": ["*"],
       "@types/*": ["types/*"]
     },
     "resolveJsonModule": true,

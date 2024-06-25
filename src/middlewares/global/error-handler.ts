@@ -25,7 +25,11 @@ const errorHandler: ErrorHandlerFunction = (
     error.message || ResponseMessage.FAIL,
   );
 
-  response.status(ResponseCodes.BAD_REQUEST).json(responseData);
+  if (error.name === ErrorNames.INVALID_ROUTE) {
+    response.status(ResponseCodes.NOT_FOUND).json(responseData);
+  } else {
+    response.status(ResponseCodes.BAD_REQUEST).json(responseData);
+  }
 };
 
 export default errorHandler;

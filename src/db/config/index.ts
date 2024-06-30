@@ -1,27 +1,31 @@
-import { Dialect, Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+import { Sequelize } from 'sequelize';
+import { CurrentEnvironment } from './types';
+import configMapping from './mapping';
 
-dotenv.config();
-
-const { PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE, PG_PORT } = process.env;
+const currentEnv: CurrentEnvironment = process.env
+  .NODE_ENV as CurrentEnvironment;
+const isTest: boolean = currentEnv === 'test';
 
 const sequelizeConnection: Sequelize = new Sequelize(
-  PG_DATABASE as string,
-  PG_USER as string,
-  PG_PASSWORD,
+  configMapping[currentEnv].database,
+  configMapping[currentEnv].user,
+  configMapping[currentEnv].password,
   {
-    database: PG_DATABASE,
-    username: PG_USER,
-    password: PG_PASSWORD,
-    host: PG_HOST,
-    port: Number(PG_PORT),
-    dialect: 'postgres' as Dialect,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    },
+    database: configMapping[currentEnv].database,
+    username: configMapping[currentEnv].user,
+    password: configMapping[currentEnv].password,
+    host: configMapping[currentEnv].host,
+    port: Number(configMapping[currentEnv].port),
+    dialect: isTest ? 'sqlite' : 'postgres',
+    storage: isTest ? ':memory:' : undefined,
+    dialectOptions: isTest
+      ? undefined
+      : {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
   },
 );
 

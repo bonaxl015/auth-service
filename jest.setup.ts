@@ -1,7 +1,7 @@
 import sequelizeConnection from './src/db/config';
 
 beforeAll(async () => {
-  await sequelizeConnection.sync();
+  await sequelizeConnection.sync({ force: true });
 });
 
 afterAll(async () => {

@@ -7,7 +7,7 @@
     "build": "rimraf dist/* && npx tsc",
     "prod": "NODE_ENV=production node build/start.js",
     "dev": "NODE_ENV=development nodemon -r tsconfig-paths/register ./src/server.ts",
-    "seed": "node build/seed.js",
+    "seed": "NODE_ENV=development node build/seed.js",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "format": "prettier --write 'src/**/*.{js,ts,json,css,md}'",
     "start": "docker-compose up --build",
@@ -21,6 +21,7 @@
   "author": "bonaxl015",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
@@ -30,6 +31,7 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/hpp": "^0.2.6",

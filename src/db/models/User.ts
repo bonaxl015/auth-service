@@ -2,6 +2,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelizeConnection from '@db/config';
 import { CreateUserInput, UserAttributes } from '@db/types/user.types';
+import bcrypt from 'bcryptjs';
 
 class User
   extends Model<UserAttributes, CreateUserInput>
@@ -16,6 +17,7 @@ class User
   // timestamps!
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  validatePassword: ((password: string) => boolean) | undefined;
 }
 
 User.init(
@@ -73,7 +75,7 @@ User.init(
           msg: 'Password cannot be empty',
         },
         len: {
-          args: [6, 50],
+          args: [6, 255],
           msg: 'Password must be at least 6 characters long',
         },
       },
@@ -83,7 +85,29 @@ User.init(
     tableName: 'User',
     timestamps: true,
     sequelize: sequelizeConnection,
+    hooks: {
+      beforeCreate: async (user) => {
+        const salt: string = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+      },
+      beforeBulkCreate: async (users) => {
+        const salt: string = await bcrypt.genSalt(10);
+        for (const user of users) {
+          user.password = await bcrypt.hash(user.password, salt);
+        }
+      },
+      beforeUpdate: async (user) => {
+        if (user.changed('password')) {
+          const salt: string = await bcrypt.genSalt(10);
+          user.password = await bcrypt.hash(user.password, salt);
+        }
+      },
+    },
   },
 );
+
+User.prototype.validatePassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 export default User;

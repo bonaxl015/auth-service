@@ -6,19 +6,19 @@ const userData: CreateUserInput[] = [
     username: 'wally',
     firstName: 'Wally',
     lastName: 'Bayola',
-    password: 'wally123',
+    password: 'password',
   },
   {
     username: 'vicsotto',
     firstName: 'Vic',
     lastName: 'Sotto',
-    password: 'VicSotto123',
+    password: 'password',
   },
   {
     username: 'dingdongdantes',
     firstName: 'Dingdong',
     lastName: 'Dantes',
-    password: 'dingdongdantes',
+    password: 'password',
   },
 ];
 

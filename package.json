@@ -5,9 +5,9 @@
   "main": "./src/server.ts",
   "scripts": {
     "build": "rimraf dist/* && npx tsc",
-    "prod": "NODE_ENV=production node build/start.js",
+    "prod": "NODE_ENV=production node ./build/start.js",
     "dev": "NODE_ENV=development nodemon -r tsconfig-paths/register ./src/server.ts",
-    "seed": "NODE_ENV=development node build/seed.js",
+    "seed": "NODE_ENV=development ts-node ./src/db/seeders/index.ts -import",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "format": "prettier --write 'src/**/*.{js,ts,json,css,md}'",
     "start": "docker-compose up --build",

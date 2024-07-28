@@ -3,6 +3,11 @@ import { DataTypes, Model } from 'sequelize';
 import sequelizeConnection from '@db/config';
 import { CreateUserInput, UserAttributes } from '@db/types/user.types';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import { CreateUserDTO } from '@api/dto/user.dto';
+
+dotenv.config();
 
 class User
   extends Model<UserAttributes, CreateUserInput>
@@ -14,10 +19,20 @@ class User
   public lastName!: string;
   public password!: string;
 
-  // timestamps!
+  // timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  validatePassword: ((password: string) => boolean) | undefined;
+
+  public validatePassword(enteredPassword: string): boolean {
+    return bcrypt.compareSync(enteredPassword, this.password);
+  }
+
+  public static getSignedJwtToken(user: CreateUserDTO): string {
+    const jwtSecret: string | undefined = process.env.JWT_SECRET as string;
+    return jwt.sign(user, jwtSecret, {
+      expiresIn: process.env.JWT_EXPIRE,
+    });
+  }
 }
 
 User.init(
@@ -44,6 +59,14 @@ User.init(
           args: [1, 12],
           msg: 'Username must be between 1 and 12 characters',
         },
+      },
+      set(value: string) {
+        const username = this.getDataValue('username');
+        if (!username || username === value) {
+          this.setDataValue('username', value);
+        } else {
+          throw new Error('Username cannot be changed once set.');
+        }
       },
     },
     firstName: {
@@ -105,9 +128,5 @@ User.init(
     },
   },
 );
-
-User.prototype.validatePassword = function (password) {
-  return bcrypt.compareSync(password, this.password);
-};
 
 export default User;

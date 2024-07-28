@@ -1,9 +1,9 @@
 import { User } from '@db/models';
 import { CreateUserInput, UpdateUserInput } from '@db/types/user.types';
-import { BaseError } from 'sequelize';
+import { UserDalData } from './types';
 
-const getById = async (id: number): Promise<User | BaseError | null> => {
-  let user: User | BaseError | null = null;
+const getById = async (id: number): Promise<UserDalData> => {
+  let user: UserDalData = null;
   try {
     user = await User.findByPk(id);
   } catch (err: any) {
@@ -13,10 +13,8 @@ const getById = async (id: number): Promise<User | BaseError | null> => {
   return user;
 };
 
-const create = async (
-  payload: CreateUserInput,
-): Promise<User | BaseError | null> => {
-  let user: User | BaseError | null = null;
+const create = async (payload: CreateUserInput): Promise<UserDalData> => {
+  let user: UserDalData = null;
   try {
     user = await User.create(payload);
   } catch (err: any) {
@@ -30,9 +28,9 @@ const create = async (
 const update = async (
   id: number,
   payload: UpdateUserInput,
-): Promise<User | BaseError | null> => {
-  let user: User | BaseError | null = null;
-  let updatedUser: User | BaseError | null = null;
+): Promise<UserDalData> => {
+  let user: UserDalData = null;
+  let updatedUser: UserDalData = null;
   try {
     user = await getById(id);
     if (user instanceof User) {
@@ -46,9 +44,9 @@ const update = async (
   return updatedUser;
 };
 
-const deleteById = async (id: number): Promise<boolean | BaseError> => {
-  let user: User | BaseError | null = null;
-  let deleteUserResponse: number | BaseError = 0;
+const deleteById = async (id: number): Promise<boolean | Error> => {
+  let user: UserDalData = null;
+  let deleteUserResponse: number | Error = 0;
   try {
     user = await getById(id);
     if (user instanceof User) {
@@ -61,7 +59,7 @@ const deleteById = async (id: number): Promise<boolean | BaseError> => {
     deleteUserResponse = err;
   }
 
-  return deleteUserResponse instanceof BaseError
+  return deleteUserResponse instanceof Error
     ? deleteUserResponse
     : Boolean(deleteUserResponse);
 };

@@ -9,15 +9,14 @@ import ResponseMessage from '@enums/responseMessages';
 import ErrorResponse from '@utils/errorResponse';
 import { returnSuccess } from '@utils/returnData';
 import ReturnData from '@utils/returnData/returnData';
-import { BaseError } from 'sequelize';
 
 const getById = async (
   id: number,
-): Promise<ReturnData<GetUserDTO> | BaseError | null> => {
+): Promise<ReturnData<GetUserDTO> | Error | null> => {
   let returnData: ReturnData<GetUserDTO> | ErrorResponse | null = null;
   const userResult = await userDal.getById(id);
 
-  if (userResult instanceof BaseError) {
+  if (userResult instanceof Error) {
     returnData = new ErrorResponse(
       userResult.name,
       userResult.message,
@@ -51,7 +50,7 @@ const create = async (
   let returnData: ReturnData<CreateUserDTO> | ErrorResponse | null = null;
   const userResult = await userDal.create(payload);
 
-  if (userResult instanceof BaseError) {
+  if (userResult instanceof Error) {
     returnData = new ErrorResponse(
       userResult.name,
       userResult.message,
@@ -78,7 +77,7 @@ const update = async (
   let returnData: ReturnData<UpdateUserDTO> | ErrorResponse | null = null;
   const userResult = await userDal.update(id, payload);
 
-  if (userResult instanceof BaseError) {
+  if (userResult instanceof Error) {
     returnData = new ErrorResponse(
       userResult.name,
       userResult.message,
@@ -100,11 +99,11 @@ const update = async (
 
 const deleteById = async (
   id: number,
-): Promise<ReturnData<null> | BaseError | null> => {
+): Promise<ReturnData<null> | Error | null> => {
   let returnData: ReturnData<null> | ErrorResponse | null = null;
   const userResult = await userDal.deleteById(id);
 
-  if (userResult instanceof BaseError) {
+  if (userResult instanceof Error) {
     returnData = new ErrorResponse(
       userResult.name,
       userResult.message,

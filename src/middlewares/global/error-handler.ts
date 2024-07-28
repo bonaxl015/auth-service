@@ -2,12 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import ResponseCodes from '@enums/responseCodes';
 import { returnFail } from '@utils/returnData';
 import { ErrorHandlerFunction } from '@middlewares/types';
-import { BaseError } from 'sequelize';
 import ResponseMessage from '@enums/responseMessages';
 import { ErrorNames } from '@enums/errorNames';
 
 const errorHandler: ErrorHandlerFunction = (
-  error: Error | BaseError,
+  error: Error,
   _request: Request,
   response: Response,
   _next: NextFunction,

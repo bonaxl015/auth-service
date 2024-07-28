@@ -13,8 +13,8 @@ describe('User routes', () => {
   let userId: number;
   const userCreate: CreateUserInput = {
     username: 'updateuser',
-    password: 'updateuser',
-    firstName: 'Update',
+    password: 'createuser',
+    firstName: 'Create',
     lastName: 'User',
   };
   const userUpdate: CreateUserInput = {

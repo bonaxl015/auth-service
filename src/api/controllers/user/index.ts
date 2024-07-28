@@ -3,7 +3,6 @@ import userService from '@db/services/UserService';
 import asyncHandler from '@middlewares/global/async-handler';
 import ErrorResponse from '@utils/errorResponse';
 import ResponseCodes from '@enums/responseCodes';
-import { BaseError } from 'sequelize';
 import { CreateUserInput, UpdateUserInput } from '@db/types/user.types';
 
 export const getUserById = asyncHandler(
@@ -51,7 +50,7 @@ export const updateUser = asyncHandler(
 
     const results = await userService.update(id, payload);
 
-    if (results instanceof BaseError) {
+    if (results instanceof Error) {
       throw results;
     }
 
